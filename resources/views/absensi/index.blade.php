@@ -37,11 +37,35 @@
     $(document).ready(function () {
         dataTable();
 
-        $('#nama').on('input', function() {
-            nama = $(this).val();
-            tbody.empty()
-            dataTable();
-        });
+
+        // Fungsi debounce
+function debounce(func, delay) {
+    let timeoutId;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(function() {
+            func.apply(context, args);
+        }, delay);
+    };
+}
+
+// Handler untuk event input
+const handleInput = debounce(function() {
+    nama = $('#nama').val();
+    tbody.empty();
+    dataTable();
+}, 500); // Mengatur waktu penundaan (dalam milidetik)
+
+// Menggunakan event 'input' dengan fungsi debounce
+$('#nama').on('input', handleInput);
+
+        // $('#nama').on('input', function() {
+        //     nama = $(this).val();
+        //     tbody.empty()
+        //     dataTable();
+        // });
 
         
         // Menggunakan Ajax untuk mengambil data absensi
