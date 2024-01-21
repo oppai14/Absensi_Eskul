@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard.index');
-Route::post('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+Route::get('/absensi/dataTable', [AbsensiController::class, 'dataTable']);
+// Route::post('/absensi', [AbsensiController::class, 'dataTable'])->name('absensi.dataTable');
+
 // Route::get('absensi',AbsensiController::class);

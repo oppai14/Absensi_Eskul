@@ -15,8 +15,23 @@ class AbsensiController extends Controller
     }
     public function dataTable(Request $request)
     {
-        $absensi = Absensi::all();
-        return response()->json(['data' => $absensi]);
+        if ($request->ajax()) {
+            $query = Absensi::query();
+    
+            // Cek apakah parameter 'nama' ada dalam permintaan
+            if ($request->has('nama')) {
+                $nama = $request->input('nama');
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+    
+            // Lanjutkan untuk menambahkan kondisi filter berdasarkan parameter lain jika diperlukan
+    
+            $data = $query->get();
+    
+            return response()->json(['data' => $data]);
+        }
+    
+        return view('absensi.index');
     }
 
     // Menampilkan formulir untuk menambahkan data absensi baru

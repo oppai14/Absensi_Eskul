@@ -1,17 +1,83 @@
 <!-- resources/views/absensi/index.blade.php -->
 
-@include('template.dashboard')
+{{-- @include('template.dashboard') --}}
 
-@section('content')
+{{-- @section('content') --}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Document</title>
+        <script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+
+    </head>
+    
+<body>
     <h1>Data Absensi</h1>
+    <form action="">
+        <input type="text" name="filter_nama" id="nama">
+
+    </form>
     <table id="absensiTable">
         <thead>
             <th>Id</th>
             <th>Nama</th>
             <th>Kelas</th>
         </thead>
-        <tbody></tbody>
+        <tbody id="isi"></tbody>
     </table>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <!-- ... -->
+<script>
+    var nama = '';
+    var tbody = $('#isi');
+    $(document).ready(function () {
+        dataTable();
+
+        $('#nama').on('input', function() {
+            nama = $(this).val();
+            tbody.empty()
+            dataTable();
+        });
+
+        
+        // Menggunakan Ajax untuk mengambil data absensi
+        
+    });
+
+    function dataTable(){
+        $.ajax({
+            url: 'absensi/dataTable',
+            type: 'GET',
+            dataType: 'json',
+            data:{
+                nama: nama
+            },
+            success: function (data) {
+                // Memasukkan data ke dalam tabel
+                $.each(data.data, function (index, item) {
+                    $('#isi').append('<tr><td>' + item.id + '</td><td>' + item.nama + '</td><td>' + item.kelas + '</td></tr>');
+                });
+
+                // Inisialisasi DataTable setelah data dimasukkan
+                $('#absensiTable').DataTable();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    }
+</script>
+<!-- ... -->
+
+
+
+</body>
+</html>
+    
 
     {{-- @if(session('success'))
         <div class="alert alert-success">
@@ -48,37 +114,6 @@
         </tbody>
     </table> --}}
    {{-- <script src="{{ asset('js/absensi/index.js') }}"></script> --}}
-   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-   <script>
-    $(document).ready(function(){
-        dataTable();
-        console.log('aufa siap');
-    });
-
-    function dataTable(){
-        $('#absensiTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url : route('absensi.dataTable'),
-            "type" : "POST",
-            dataType: "JSON",
-            data:{
-                filterNama : nama,
-                filterKelas : kelas,
-            }
-
-        }'/absensi/get-absensi-data',
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'nama', name: 'nama' },
-            { data: 'kelas', name: 'kelas' },
-        ]
-    });
-    }
-   </script>
-
-
+   
     {{-- <a href="{{ route('absensi.create') }}" class="btn btn-success">Tambah Absensi Baru</a> --}}
-@endsection 
+{{-- @endsection  --}}
